@@ -2,6 +2,16 @@ set export
 
 DEVCONTAINER := ".devcontainer"
 
+run:
+    go run src/*.go
+
+run-dev:
+    #!/bin/zsh
+
+    export SERVER_ADDRESS=127.0.0.1:8000
+
+    reflex -r "\.go" -s -- sh -c "just run"
+
 initialize-gcloud:
     #!/bin/zsh
 
@@ -14,9 +24,13 @@ create-api-key-dev project-id suffix:
     . $DEVCONTAINER_VIRTUAL_ENVIRONMENT/bin/activate
     python scripts/create_api_keys.py --project_id {{ project-id }} --suffix {{ suffix }}
 
-setup-dev-container: copy-to-container setup-zsh-environment
+setup-dev-container: copy-to-container setup-zsh-environment setup-go-environment
 
 initialize-dev-container: copy-git-config-from-outside-container set-environment
+
+[private]
+setup-go-environment:
+    go install github.com/cespare/reflex@latest
 
 [private]
 setup-zsh-environment:
