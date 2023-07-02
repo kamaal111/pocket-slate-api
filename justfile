@@ -1,4 +1,5 @@
 set export
+set dotenv-load
 
 DEVCONTAINER := ".devcontainer"
 
