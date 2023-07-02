@@ -14,7 +14,11 @@ import (
 func Start() {
 	serverAddress := os.Getenv("SERVER_ADDRESS")
 	if serverAddress == "" {
-		serverAddress = fmt.Sprintf(":%s", utils.UnwrapEnvironment("PORT"))
+		port, err := utils.UnwrapEnvironment("PORT")
+		if err != nil {
+			log.Fatal(err)
+		}
+		serverAddress = fmt.Sprintf(":%s", port)
 	}
 
 	mux := http.NewServeMux()

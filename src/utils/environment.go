@@ -1,15 +1,15 @@
 package utils
 
 import (
-	"log"
+	"fmt"
 	"os"
 )
 
-func UnwrapEnvironment(key string) string {
+func UnwrapEnvironment(key string) (string, error) {
 	value := os.Getenv(key)
 	if value == "" {
-		log.Fatalf("%s not defined in the environment\n", key)
+		return "", fmt.Errorf("%s not defined in the environment", key)
 	}
 
-	return value
+	return value, nil
 }
