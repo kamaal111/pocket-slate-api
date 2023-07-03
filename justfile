@@ -18,6 +18,9 @@ run-dev:
 
     reflex -r "\.go" -s -- sh -c "go run src/*.go"
 
+make-api-key:
+    go run commands/*.go api-key make
+
 setup-dev-container: copy-to-container setup-zsh-environment setup-go-environment
 
 initialize-dev-container: copy-git-config-from-outside-container set-environment
@@ -60,6 +63,8 @@ setup-zsh-environment:
 
 [private]
 set-environment:
+    #!/bin/zsh
+
     ENVIRONMENT_FILE="$DEVCONTAINER/.zshenv"
 
     rm -rf $ENVIRONMENT_FILE
