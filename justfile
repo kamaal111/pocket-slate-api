@@ -24,12 +24,6 @@ run-dev:
 
     reflex -r "\.go" -s -- sh -c "go run src/*.go"
 
-initialize-gcloud:
-    #!/bin/zsh
-
-    gcloud init
-    gcloud auth application-default login
-
 setup-dev-container: copy-to-container setup-zsh-environment setup-go-environment
 
 initialize-dev-container: copy-git-config-from-outside-container set-environment
