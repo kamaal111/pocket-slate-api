@@ -2,16 +2,27 @@ set export
 set dotenv-load
 
 DEVCONTAINER := ".devcontainer"
+CONTAINER_NAME := "pocket-slate-api"
+PORT := "8000"
 
-run:
-    go run src/*.go
+build:
+    #!/bin/zsh
+
+    docker build -t $CONTAINER_NAME .
+
+run: stop-and-remove-container
+    #!/bin/zsh
+
+    docker run -dp $PORT:$PORT --name $CONTAINER_NAME -e PORT=$PORT $CONTAINER_NAME
+
+build-run: build run
 
 run-dev:
     #!/bin/zsh
 
-    export SERVER_ADDRESS=127.0.0.1:8000
+    export SERVER_ADDRESS="127.0.0.1:$PORT"
 
-    reflex -r "\.go" -s -- sh -c "just run"
+    reflex -r "\.go" -s -- sh -c "go run src/*.go"
 
 initialize-gcloud:
     #!/bin/zsh
@@ -19,15 +30,15 @@ initialize-gcloud:
     gcloud init
     gcloud auth application-default login
 
-create-api-key-dev project-id suffix:
-    #!/bin/zsh
-
-    . $DEVCONTAINER_VIRTUAL_ENVIRONMENT/bin/activate
-    python scripts/create_api_keys.py --project_id {{ project-id }} --suffix {{ suffix }}
-
 setup-dev-container: copy-to-container setup-zsh-environment setup-go-environment
 
 initialize-dev-container: copy-git-config-from-outside-container set-environment
+
+[private]
+stop-and-remove-container:
+    #!/bin/zsh
+
+    docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
 
 [private]
 setup-go-environment:
