@@ -22,3 +22,9 @@ jobs:
       
       - name: Build image
         run: just build
+
+      - name: Tag image
+        env:
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          COMMIT_SHA: ${{ github.sha }}
+        run: just tag-image

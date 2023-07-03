@@ -18,6 +18,9 @@ run-dev:
 
     reflex -r "\.go" -s -- sh -c "go run src/*.go"
 
+tag-image:
+    docker tag $CONTAINER_NAME "gcr.io/$GCP_PROJECT_ID/$CONTAINER_NAME:$COMMIT_SHA"
+
 setup-dev-container: copy-to-container setup-zsh-environment setup-go-environment
 
 initialize-dev-container: copy-git-config-from-outside-container set-environment
