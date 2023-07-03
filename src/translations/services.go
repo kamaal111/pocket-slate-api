@@ -35,7 +35,42 @@ type translationService struct {
 	Context context.Context
 }
 
-func (service translationService) SupportedLanguages(target string) ([]supportedLocale, *utils.Error) {
+func (service *translationService) Translate(text string, source string, target string) (string, *utils.Error) {
+	targetLang, err := language.Parse(target)
+	if err != nil {
+		return "", &utils.Error{
+			Message: fmt.Sprintf("Invalid target of %s", target),
+			Status:  http.StatusBadRequest,
+		}
+	}
+
+	sourceLang, err := language.Parse(source)
+	if err != nil {
+		return "", &utils.Error{
+			Message: fmt.Sprintf("Invalid source of %s", target),
+			Status:  http.StatusBadRequest,
+		}
+	}
+
+	resp, err := service.Client.Translate(service.Context, []string{text}, targetLang, &translate.Options{Source: sourceLang})
+	if err != nil {
+		return "", &utils.Error{
+			Message: err.Error(),
+			Status:  http.StatusInternalServerError,
+		}
+	}
+
+	if len(resp) == 0 {
+		return "", &utils.Error{
+			Message: "No translations found",
+			Status:  http.StatusNotFound,
+		}
+	}
+
+	return resp[0].Text, nil
+}
+
+func (service *translationService) SupportedLanguages(target string) ([]supportedLocale, *utils.Error) {
 	lang, err := language.Parse(target)
 	if err != nil {
 		return []supportedLocale{}, &utils.Error{
