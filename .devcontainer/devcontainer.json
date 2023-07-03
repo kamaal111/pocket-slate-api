@@ -15,7 +15,8 @@
 			"extensions": [
 				"skellock.just",
 				"streetsidesoftware.code-spell-checker",
-				"golang.go"
+				"golang.go",
+				"redhat.vscode-yaml"
 			]
 		}
 	},

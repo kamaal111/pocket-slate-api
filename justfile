@@ -6,20 +6,14 @@ CONTAINER_NAME := "pocket-slate-api"
 PORT := "8000"
 
 build:
-    #!/bin/zsh
-
     docker build -t $CONTAINER_NAME .
 
 run: stop-and-remove-container
-    #!/bin/zsh
-
     docker run -dp $PORT:$PORT --name $CONTAINER_NAME -e PORT=$PORT $CONTAINER_NAME
 
 build-run: build run
 
 run-dev:
-    #!/bin/zsh
-
     export SERVER_ADDRESS="127.0.0.1:$PORT"
 
     reflex -r "\.go" -s -- sh -c "go run src/*.go"
@@ -30,8 +24,6 @@ initialize-dev-container: copy-git-config-from-outside-container set-environment
 
 [private]
 stop-and-remove-container:
-    #!/bin/zsh
-
     docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
 
 [private]
@@ -68,8 +60,6 @@ setup-zsh-environment:
 
 [private]
 set-environment:
-    #!/bin/zsh
-
     ENVIRONMENT_FILE="$DEVCONTAINER/.zshenv"
 
     rm -rf $ENVIRONMENT_FILE
@@ -80,12 +70,8 @@ set-environment:
 
 [private]
 copy-git-config-from-outside-container:
-    #!/bin/zsh
-
     cp -f ~/.gitconfig $DEVCONTAINER/.gitconfig
 
 [private]
 copy-to-container:
-    #!/bin/zsh
-
     cp -f $DEVCONTAINER/.gitconfig ~/.gitconfig
