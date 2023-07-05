@@ -21,6 +21,9 @@ run-dev:
 make-api-key:
     go run commands/*.go api-key make
 
+copy-api-keys-to-env:
+    go run commands/*.go api-key copy-to-env secrets/app-api-keys.json .env
+
 setup-dev-container: copy-to-container setup-zsh-environment setup-go-environment
 
 initialize-dev-container: copy-git-config-from-outside-container set-environment
