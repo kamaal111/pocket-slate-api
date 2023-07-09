@@ -5,6 +5,9 @@ DEVCONTAINER := ".devcontainer"
 CONTAINER_NAME := "pocket-slate-api"
 PORT := "8000"
 
+test:
+    go test ./...
+
 build:
     docker build -t $CONTAINER_NAME .
 
