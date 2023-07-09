@@ -8,3 +8,12 @@ func MapSlice[Input any, Output any](input []Input, transformer func(Input) Outp
 
 	return result
 }
+
+func FindInSlice[T comparable](input []T, target T) *T {
+	for _, item := range input {
+		if item == target {
+			return &item
+		}
+	}
+	return nil
+}

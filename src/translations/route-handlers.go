@@ -7,7 +7,7 @@ import (
 	"github.com/kamaal111/pocket-slate-api/src/utils"
 )
 
-func makeTranslationHandler(writer http.ResponseWriter, request *http.Request) {
+func MakeTranslationHandler(writer http.ResponseWriter, request *http.Request) {
 	var payload makeTranslationPayload
 	err := json.NewDecoder(request.Body).Decode(&payload)
 	if err != nil {
@@ -37,7 +37,7 @@ func makeTranslationHandler(writer http.ResponseWriter, request *http.Request) {
 	utils.MarshalJSONResponse(writer, makeTranslationResponse{TranslatedText: resp})
 }
 
-func getSupportedLocalesHandler(writer http.ResponseWriter, request *http.Request) {
+func GetSupportedLocalesHandler(writer http.ResponseWriter, request *http.Request) {
 	target, err := utils.UnwrapURLQuery(request, "target")
 	if target == "" {
 		utils.ErrorHandler(writer, err.Error(), http.StatusBadRequest)

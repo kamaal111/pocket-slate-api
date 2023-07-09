@@ -6,7 +6,7 @@ import (
 	"github.com/kamaal111/pocket-slate-api/src/utils"
 )
 
-func pingHandler(writer http.ResponseWriter, request *http.Request) {
+func PingHandler(writer http.ResponseWriter, request *http.Request) {
 	utils.MarshalJSONResponse(writer, struct {
 		Message string `json:"message"`
 	}{Message: "pong"})
