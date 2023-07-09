@@ -27,6 +27,14 @@ func allowHTTPMethods(methods []string) func(next http.HandlerFunc) http.Handler
 func authenticateApps(apps []string) func(next http.HandlerFunc) http.HandlerFunc {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			appName := r.Header.Get("app-name")
+			appVersion := r.Header.Get("app-version")
+			apiKey := r.Header.Get("api-key")
+			if appName == "" || appVersion == "" || apiKey == "" {
+				utils.ErrorHandler(w, "Forbidden", http.StatusForbidden)
+				return
+			}
+
 			rawAppAPIKeys, err := utils.UnwrapEnvironment("APP_API_KEYS")
 			if err != nil {
 				utils.ErrorHandler(w, "Something went wrong", http.StatusInternalServerError)
@@ -37,6 +45,12 @@ func authenticateApps(apps []string) func(next http.HandlerFunc) http.HandlerFun
 			err = json.Unmarshal([]byte(rawAppAPIKeys), &appAPIKeys)
 			if err != nil {
 				utils.ErrorHandler(w, "Something went wrong", http.StatusInternalServerError)
+				return
+			}
+
+			token := appAPIKeys[appName][appVersion]
+			if token == "" || token != apiKey {
+				utils.ErrorHandler(w, "Forbidden", http.StatusForbidden)
 				return
 			}
 
