@@ -6,6 +6,6 @@ import (
 	"github.com/kamaal111/pocket-slate-api/src/utils"
 )
 
-func notFound(w http.ResponseWriter, r *http.Request) {
+func NotFound(w http.ResponseWriter, r *http.Request) {
 	utils.ErrorHandler(w, "Not found", http.StatusNotFound)
 }
