@@ -1,4 +1,4 @@
-package routers
+package routers_test
 
 import (
 	"net/http"
@@ -6,10 +6,12 @@ import (
 	"testing"
 
 	"github.com/gavv/httpexpect/v2"
+
+	"github.com/kamaal111/pocket-slate-api/src/routers"
 )
 
 func TestErrors(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(notFound))
+	server := httptest.NewServer(http.HandlerFunc(routers.NotFound))
 	defer server.Close()
 
 	e := httpexpect.Default(t, server.URL)

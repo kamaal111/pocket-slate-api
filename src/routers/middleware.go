@@ -40,8 +40,6 @@ func authenticateApps(apps []string) func(next http.HandlerFunc) http.HandlerFun
 				return
 			}
 
-			fmt.Println(appAPIKeys)
-
 			next.ServeHTTP(w, r)
 		})
 	}
