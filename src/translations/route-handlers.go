@@ -16,7 +16,7 @@ func MakeTranslationHandler(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	if payload.Text == nil || payload.SourceLocale == nil || payload.TargetLocale == nil {
-		utils.ErrorHandler(writer, "Invalid payload provided", http.StatusBadRequest)
+		utils.ErrorHandler(writer, "Incomplete payload provided", http.StatusUnprocessableEntity)
 		return
 	}
 
@@ -34,12 +34,12 @@ func MakeTranslationHandler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	utils.MarshalJSONResponse(writer, makeTranslationResponse{TranslatedText: resp})
+	utils.MarshalJSONResponse(writer, makeTranslationResponse{TranslatedText: resp}, http.StatusOK)
 }
 
 func GetSupportedLocalesHandler(writer http.ResponseWriter, request *http.Request) {
 	target, err := utils.UnwrapURLQuery(request, "target")
-	if target == "" {
+	if err != nil {
 		utils.ErrorHandler(writer, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -58,5 +58,5 @@ func GetSupportedLocalesHandler(writer http.ResponseWriter, request *http.Reques
 		return
 	}
 
-	utils.MarshalJSONResponse(writer, resp)
+	utils.MarshalJSONResponse(writer, resp, http.StatusOK)
 }

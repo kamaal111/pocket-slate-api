@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 )
@@ -16,8 +15,7 @@ func ErrorHandler(w http.ResponseWriter, message string, code int) {
 		Message: message,
 		Status:  code,
 	}
-	log.Printf("failure message: %s; code: %d\n", message, code)
-	w.Header().Set("content-type", "application/json")
-	w.WriteHeader(errorResponse.Status)
-	json.NewEncoder(w).Encode(errorResponse)
+	log.Printf("failure message: %s; code: %d\n", errorResponse.Message, errorResponse.Status)
+
+	MarshalJSONResponse(w, errorResponse, errorResponse.Status)
 }
