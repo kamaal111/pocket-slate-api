@@ -9,5 +9,5 @@ import (
 func PingHandler(writer http.ResponseWriter, request *http.Request) {
 	utils.MarshalJSONResponse(writer, struct {
 		Message string `json:"message"`
-	}{Message: "pong"})
+	}{Message: "pong"}, http.StatusOK)
 }

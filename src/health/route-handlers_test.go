@@ -18,6 +18,7 @@ func TestPing(t *testing.T) {
 	ping := e.GET("/").
 		Expect().
 		Status(http.StatusOK).
+		ContentType("application/json").
 		JSON().
 		Object()
 	ping.Value("message").IsEqual("pong")

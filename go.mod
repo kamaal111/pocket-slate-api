@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go/translate v1.8.1
 	github.com/gavv/httpexpect/v2 v2.15.0
 	github.com/spf13/cobra v1.7.0
+	github.com/stretchr/testify v1.8.1
 	golang.org/x/text v0.9.0
 	google.golang.org/api v0.126.0
 )
@@ -39,7 +40,6 @@ require (
 	github.com/sanity-io/litter v1.5.5 // indirect
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stretchr/testify v1.8.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.34.0 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
