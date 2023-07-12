@@ -9,11 +9,9 @@ func PascalToSnakeCase(term string) string {
 	var words []string
 	var word string
 	for _, character := range term {
-		if unicode.IsUpper(character) {
-			if len(word) != 0 {
-				words = append(words, word)
-				word = ""
-			}
+		if unicode.IsUpper(character) && len(word) != 0 {
+			words = append(words, word)
+			word = ""
 		}
 
 		word += string(unicode.ToLower(character))
