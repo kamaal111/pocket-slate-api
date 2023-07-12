@@ -6,11 +6,7 @@ type supportedLocale struct {
 }
 
 type makeTranslationPayload struct {
-	Text         *string `json:"text"`
-	TargetLocale *string `json:"target_locale"`
-	SourceLocale *string `json:"source_locale"`
-}
-
-type makeTranslationResponse struct {
-	TranslatedText string `json:"translated_text"`
+	Text         string `json:"text" binding:"required"`
+	TargetLocale string `json:"target_locale" binding:"required"`
+	SourceLocale string `json:"source_locale" binding:"required"`
 }

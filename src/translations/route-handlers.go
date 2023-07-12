@@ -1,40 +1,57 @@
 package translations
 
 import (
-	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 
 	"github.com/kamaal111/pocket-slate-api/src/utils"
 )
 
-func MakeTranslationHandler(writer http.ResponseWriter, request *http.Request) {
+func makeTranslationHandler(context *gin.Context) {
 	var payload makeTranslationPayload
-	err := json.NewDecoder(request.Body).Decode(&payload)
+	err := context.ShouldBindJSON(&payload)
 	if err != nil {
-		utils.ErrorHandler(writer, "Invalid payload provided", http.StatusBadRequest)
-		return
-	}
+		var validationErrors validator.ValidationErrors
+		if errors.As(err, &validationErrors) {
+			for _, err := range validationErrors {
+				context.
+					JSON(http.StatusUnprocessableEntity, gin.H{
+						"message": fmt.Sprintf("%s is %s", utils.PascalToSnakeCase(err.Field()), err.Tag()),
+					})
+				return
+			}
+		}
 
-	if payload.Text == nil || payload.SourceLocale == nil || payload.TargetLocale == nil {
-		utils.ErrorHandler(writer, "Incomplete payload provided", http.StatusUnprocessableEntity)
+		context.
+			JSON(http.StatusBadRequest, gin.H{
+				"message": "Invalid payload provided",
+			})
 		return
 	}
 
 	var resp string
 	var httpErr *utils.Error
 	err = withTranslationService(func(ts translationService) {
-		resp, httpErr = ts.Translate(*payload.Text, *payload.SourceLocale, *payload.TargetLocale)
+		resp, httpErr = ts.Translate(payload.Text, payload.SourceLocale, payload.TargetLocale)
 	})
 	if err != nil {
-		utils.ErrorHandler(writer, err.Error(), http.StatusInternalServerError)
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
 		return
 	}
 	if httpErr != nil {
-		utils.ErrorHandler(writer, httpErr.Message, httpErr.Status)
+		context.JSON(httpErr.Status, gin.H{
+			"message": httpErr.Message,
+		})
 		return
 	}
 
-	utils.MarshalJSONResponse(writer, makeTranslationResponse{TranslatedText: resp}, http.StatusOK)
+	context.JSON(http.StatusOK, gin.H{"translated_text": resp})
 }
 
 func GetSupportedLocalesHandler(writer http.ResponseWriter, request *http.Request) {
