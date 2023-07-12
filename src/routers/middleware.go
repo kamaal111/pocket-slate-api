@@ -7,8 +7,16 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/kamaal111/pocket-slate-api/src/utils"
 )
+
+func jsonMiddleware() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		context.Writer.Header().Set("Content-Type", "application/json")
+		context.Next()
+	}
+}
 
 func allowHTTPMethods(methods []string) func(next http.HandlerFunc) http.HandlerFunc {
 	return func(next http.HandlerFunc) http.HandlerFunc {

@@ -6,16 +6,27 @@ import (
 	"testing"
 
 	"github.com/gavv/httpexpect/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/kamaal111/pocket-slate-api/src/translations"
 )
 
 func TestMakeTranslationHandlerNoPayloadProvided(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(translations.MakeTranslationHandler))
-	defer server.Close()
+	engine := gin.New()
 
-	e := httpexpect.Default(t, server.URL)
+	handler := translations.Router(engine)
 
-	makeTranslation := e.POST("/").
+	e := httpexpect.WithConfig(httpexpect.Config{
+		Client: &http.Client{
+			Transport: httpexpect.NewBinder(handler),
+			Jar:       httpexpect.NewCookieJar(),
+		},
+		Reporter: httpexpect.NewAssertReporter(t),
+		Printers: []httpexpect.Printer{
+			httpexpect.NewDebugPrinter(t, true),
+		},
+	})
+
+	makeTranslation := e.POST("/v1/translations").
 		Expect().
 		Status(http.StatusBadRequest).
 		ContentType("application/json").
@@ -46,20 +57,30 @@ func TestMakeTranslationHandlerInCompletePayload(t *testing.T) {
 		},
 	}
 
-	server := httptest.NewServer(http.HandlerFunc(translations.MakeTranslationHandler))
-	defer server.Close()
+	engine := gin.New()
 
-	e := httpexpect.Default(t, server.URL)
+	handler := translations.Router(engine)
+
+	e := httpexpect.WithConfig(httpexpect.Config{
+		Client: &http.Client{
+			Transport: httpexpect.NewBinder(handler),
+			Jar:       httpexpect.NewCookieJar(),
+		},
+		Reporter: httpexpect.NewAssertReporter(t),
+		Printers: []httpexpect.Printer{
+			httpexpect.NewDebugPrinter(t, true),
+		},
+	})
 
 	for _, payload := range payloads {
-		makeTranslation := e.POST("/").
+		makeTranslation := e.POST("/v1/translations").
 			WithJSON(payload).
 			Expect().
 			Status(http.StatusUnprocessableEntity).
 			ContentType("application/json").
 			JSON().
 			Object()
-		makeTranslation.Value("message").IsEqual("Incomplete payload provided")
+		makeTranslation.Value("message").String().Contains("is required")
 	}
 
 }

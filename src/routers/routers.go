@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/kamaal111/pocket-slate-api/src/health"
+	"github.com/kamaal111/pocket-slate-api/src/translations"
 	"github.com/kamaal111/pocket-slate-api/src/utils"
 )
 
@@ -23,28 +24,19 @@ func Start() {
 
 	engine := gin.Default()
 	engine.SetTrustedProxies(nil)
+	engine.Use(jsonMiddleware())
 
 	health.Router(engine)
+	translations.Router(engine)
 
 	engine.Run(serverAddress)
 
-	// mux.Handle(
-	// 	"/v1/health/ping",
-	// 	loggerMiddleware(
-	// 		allowHTTPMethods([]string{http.MethodGet})(
-	// 			health.PingHandler)))
 	// mux.Handle(
 	// 	strings.Join([]string{"/v1/translations", "supported-locales"}, "/"),
 	// 	loggerMiddleware(
 	// 		allowHTTPMethods([]string{http.MethodGet})(
 	// 			authenticateApps([]string{"pocket-slate"})(
 	// 				translations.GetSupportedLocalesHandler))))
-	// mux.Handle(
-	// 	"/v1/translations",
-	// 	loggerMiddleware(
-	// 		allowHTTPMethods([]string{http.MethodPost})(
-	// 			authenticateApps([]string{"pocket-slate"})(
-	// 				translations.MakeTranslationHandler))))
 	// mux.Handle(
 	// 	"/",
 	// 	loggerMiddleware(
