@@ -17,7 +17,10 @@ run: stop-and-remove-container
 build-run: build run
 
 run-dev:
+    #!/bin/zsh
+
     export SERVER_ADDRESS="127.0.0.1:$PORT"
+    export GIN_MODE="debug"
 
     reflex -r "\.go" -s -- sh -c "go run src/*.go"
 

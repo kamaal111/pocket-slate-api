@@ -2,20 +2,31 @@ package health_test
 
 import (
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/gavv/httpexpect/v2"
+	"github.com/gin-gonic/gin"
+
 	"github.com/kamaal111/pocket-slate-api/src/health"
 )
 
 func TestPing(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(health.PingHandler))
-	defer server.Close()
+	engine := gin.New()
 
-	e := httpexpect.Default(t, server.URL)
+	handler := health.Router(engine)
 
-	ping := e.GET("/").
+	e := httpexpect.WithConfig(httpexpect.Config{
+		Client: &http.Client{
+			Transport: httpexpect.NewBinder(handler),
+			Jar:       httpexpect.NewCookieJar(),
+		},
+		Reporter: httpexpect.NewAssertReporter(t),
+		Printers: []httpexpect.Printer{
+			httpexpect.NewDebugPrinter(t, true),
+		},
+	})
+
+	ping := e.GET("/v1/health/ping").
 		Expect().
 		Status(http.StatusOK).
 		ContentType("application/json").

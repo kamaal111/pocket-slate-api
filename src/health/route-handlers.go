@@ -3,11 +3,11 @@ package health
 import (
 	"net/http"
 
-	"github.com/kamaal111/pocket-slate-api/src/utils"
+	"github.com/gin-gonic/gin"
 )
 
-func PingHandler(writer http.ResponseWriter, request *http.Request) {
-	utils.MarshalJSONResponse(writer, struct {
-		Message string `json:"message"`
-	}{Message: "pong"}, http.StatusOK)
+func pingHandler(context *gin.Context) {
+	context.JSON(http.StatusOK, gin.H{
+		"message": "pong",
+	})
 }
