@@ -28,12 +28,7 @@ func Start() {
 
 	health.Router(engine)
 	translations.Router(engine)
+	engine.NoRoute(NotFound)
 
 	engine.Run(serverAddress)
-
-	// mux.Handle(
-	// 	"/",
-	// 	loggerMiddleware(
-	// 		allowHTTPMethods([]string{http.MethodGet})(
-	// 			NotFound)))
 }
