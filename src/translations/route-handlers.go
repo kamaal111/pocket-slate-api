@@ -21,7 +21,7 @@ func makeTranslationHandler(context *gin.Context) {
 			for _, err := range validationErrors {
 				context.
 					JSON(http.StatusUnprocessableEntity, gin.H{
-						"message": fmt.Sprintf("%s is %s", utils.PascalToSnakeCase(err.Field()), err.Tag()),
+						"message": fmt.Sprintf("'%s' is %s in the body", utils.PascalToSnakeCase(err.Field()), err.Tag()),
 					})
 				return
 			}
@@ -64,7 +64,7 @@ func getSupportedLocalesHandler(context *gin.Context) {
 			for _, err := range validationErrors {
 				context.
 					JSON(http.StatusUnprocessableEntity, gin.H{
-						"message": fmt.Sprintf("'%s' is %s", utils.PascalToSnakeCase(err.Field()), err.Tag()),
+						"message": fmt.Sprintf("'%s' is %s in the query params", utils.PascalToSnakeCase(err.Field()), err.Tag()),
 					})
 				return
 			}

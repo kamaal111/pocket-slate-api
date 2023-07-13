@@ -6,6 +6,7 @@ require (
 	cloud.google.com/go/translate v1.8.1
 	github.com/gavv/httpexpect/v2 v2.15.0
 	github.com/go-playground/validator/v10 v10.14.0
+	github.com/hashicorp/go-version v1.6.0
 	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.3
 	golang.org/x/text v0.9.0
