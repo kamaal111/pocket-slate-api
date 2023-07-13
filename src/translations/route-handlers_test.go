@@ -47,7 +47,7 @@ func TestMakeTranslationHandlerNoPayloadProvided(t *testing.T) {
 		ContentType("application/json").
 		JSON().
 		Object()
-	makeTranslation.Value("message").IsEqual("Invalid payload provided")
+	makeTranslation.Value("message").IsEqual("Invalid body provided")
 }
 
 func TestMakeTranslationHandlerInCompletePayload(t *testing.T) {

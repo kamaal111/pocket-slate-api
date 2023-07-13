@@ -1,13 +1,10 @@
 package translations
 
 import (
-	"errors"
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 
 	"github.com/kamaal111/pocket-slate-api/src/utils"
 )
@@ -16,21 +13,15 @@ func makeTranslationHandler(context *gin.Context) {
 	var payload makeTranslationPayload
 	err := context.ShouldBindJSON(&payload)
 	if err != nil {
-		var validationErrors validator.ValidationErrors
-		if errors.As(err, &validationErrors) {
-			for _, err := range validationErrors {
-				context.
-					JSON(http.StatusUnprocessableEntity, gin.H{
-						"message": fmt.Sprintf("'%s' is %s in the body", utils.PascalToSnakeCase(err.Field()), err.Tag()),
-					})
-				return
-			}
+		handled := utils.HandleValidationErrors(context, err, "body")
+		if handled {
+			return
 		}
 
-		context.
-			JSON(http.StatusBadRequest, gin.H{
-				"message": "Invalid payload provided",
-			})
+		utils.ErrorHandler(context, utils.Error{
+			Status:  http.StatusBadRequest,
+			Message: "Invalid body provided",
+		})
 		return
 	}
 
@@ -40,15 +31,15 @@ func makeTranslationHandler(context *gin.Context) {
 		resp, httpErr = ts.Translate(payload.Text, payload.SourceLocale, payload.TargetLocale)
 	})
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{
-			"message": err.Error(),
+		log.Println("Failed to get translation context", err)
+		utils.ErrorHandler(context, utils.Error{
+			Status:  http.StatusInternalServerError,
+			Message: err.Error(),
 		})
 		return
 	}
 	if httpErr != nil {
-		context.JSON(httpErr.Status, gin.H{
-			"message": httpErr.Message,
-		})
+		utils.ErrorHandler(context, *httpErr)
 		return
 	}
 
@@ -59,21 +50,15 @@ func getSupportedLocalesHandler(context *gin.Context) {
 	var query getSupportedLocalesQuery
 	err := context.ShouldBindQuery(&query)
 	if err != nil {
-		var validationErrors validator.ValidationErrors
-		if errors.As(err, &validationErrors) {
-			for _, err := range validationErrors {
-				context.
-					JSON(http.StatusUnprocessableEntity, gin.H{
-						"message": fmt.Sprintf("'%s' is %s in the query params", utils.PascalToSnakeCase(err.Field()), err.Tag()),
-					})
-				return
-			}
+		handled := utils.HandleValidationErrors(context, err, "query params")
+		if handled {
+			return
 		}
 
-		context.
-			JSON(http.StatusBadRequest, gin.H{
-				"message": "Invalid query provided",
-			})
+		utils.ErrorHandler(context, utils.Error{
+			Status:  http.StatusBadRequest,
+			Message: "Invalid query provided",
+		})
 		return
 	}
 
@@ -85,16 +70,15 @@ func getSupportedLocalesHandler(context *gin.Context) {
 
 	if err != nil {
 		log.Println("Failed to get supported languages", err)
-		context.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Something went wrong",
+		utils.ErrorHandler(context, utils.Error{
+			Status:  http.StatusInternalServerError,
+			Message: "Something went wrong",
 		})
 		return
 	}
 
 	if httpErr != nil {
-		context.JSON(httpErr.Status, gin.H{
-			"message": httpErr.Message,
-		})
+		utils.ErrorHandler(context, *httpErr)
 		return
 	}
 
