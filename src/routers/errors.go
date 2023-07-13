@@ -4,8 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/kamaal111/pocket-slate-api/src/utils"
 )
 
 func NotFound(context *gin.Context) {
-	context.JSON(http.StatusNotFound, gin.H{"message": "Not found"})
+	utils.ErrorHandler(context, utils.Error{Status: http.StatusNotFound, Message: "Not found"})
 }
