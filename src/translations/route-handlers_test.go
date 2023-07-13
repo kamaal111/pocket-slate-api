@@ -2,7 +2,6 @@ package translations_test
 
 import (
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/gavv/httpexpect/v2"
@@ -86,16 +85,26 @@ func TestMakeTranslationHandlerInCompletePayload(t *testing.T) {
 }
 
 func TestGetSupportedLocalesMissingTarget(t *testing.T) {
-	server := httptest.NewServer(http.HandlerFunc(translations.GetSupportedLocalesHandler))
-	defer server.Close()
+	engine := gin.New()
 
-	e := httpexpect.Default(t, server.URL)
+	handler := translations.Router(engine)
 
-	makeTranslation := e.GET("/").
+	e := httpexpect.WithConfig(httpexpect.Config{
+		Client: &http.Client{
+			Transport: httpexpect.NewBinder(handler),
+			Jar:       httpexpect.NewCookieJar(),
+		},
+		Reporter: httpexpect.NewAssertReporter(t),
+		Printers: []httpexpect.Printer{
+			httpexpect.NewDebugPrinter(t, true),
+		},
+	})
+
+	supportedLocales := e.GET("/v1/translations/supported-locales").
 		Expect().
-		Status(http.StatusBadRequest).
+		Status(http.StatusUnprocessableEntity).
 		ContentType("application/json").
 		JSON().
 		Object()
-	makeTranslation.Value("message").IsEqual("'target' is not defined in the query params")
+	supportedLocales.Value("message").IsEqual("'target' is required")
 }

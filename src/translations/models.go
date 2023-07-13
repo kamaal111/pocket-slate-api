@@ -10,3 +10,7 @@ type makeTranslationPayload struct {
 	TargetLocale string `json:"target_locale" binding:"required"`
 	SourceLocale string `json:"source_locale" binding:"required"`
 }
+
+type getSupportedLocalesQuery struct {
+	Target string `form:"target" binding:"required"`
+}
