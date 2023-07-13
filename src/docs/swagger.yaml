@@ -1,0 +1,25 @@
+definitions:
+  health.pingResponse:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Pings the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/health.pingResponse'
+      summary: Checks if server is up or down
+      tags:
+      - health
+swagger: "2.0"

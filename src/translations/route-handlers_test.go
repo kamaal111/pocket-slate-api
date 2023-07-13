@@ -27,7 +27,7 @@ func TestMakeTranslationHandlerNoPayloadProvided(t *testing.T) {
 
 	engine := gin.New()
 
-	handler := translations.Router(engine)
+	handler := translations.Router(engine, "/v1")
 
 	e := httpexpect.WithConfig(httpexpect.Config{
 		Client: &http.Client{
@@ -76,7 +76,7 @@ func TestMakeTranslationHandlerInCompletePayload(t *testing.T) {
 
 	engine := gin.New()
 
-	handler := translations.Router(engine)
+	handler := translations.Router(engine, "/v1")
 
 	e := httpexpect.WithConfig(httpexpect.Config{
 		Client: &http.Client{
@@ -108,7 +108,7 @@ func TestGetSupportedLocalesMissingTarget(t *testing.T) {
 
 	engine := gin.New()
 
-	handler := translations.Router(engine)
+	handler := translations.Router(engine, "/v1")
 
 	e := httpexpect.WithConfig(httpexpect.Config{
 		Client: &http.Client{

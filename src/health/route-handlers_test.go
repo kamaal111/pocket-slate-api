@@ -13,7 +13,7 @@ import (
 func TestPing(t *testing.T) {
 	engine := gin.New()
 
-	handler := health.Router(engine)
+	handler := health.Router(engine, "/v1")
 
 	e := httpexpect.WithConfig(httpexpect.Config{
 		Client: &http.Client{

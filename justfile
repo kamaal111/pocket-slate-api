@@ -24,6 +24,15 @@ run-dev:
 
     reflex -r "\.go" -s -- sh -c "go run src/*.go"
 
+generate-spec: format-spec-comments
+    #!/bin/zsh
+
+    cd src
+    swag init
+
+format-spec-comments:
+    swag fmt
+
 make-api-key:
     go run commands/*.go api-key make
 
@@ -41,6 +50,7 @@ stop-and-remove-container:
 [private]
 setup-go-environment:
     go install github.com/cespare/reflex@latest
+    go install github.com/swaggo/swag/cmd/swag@latest
 
 [private]
 setup-zsh-environment:
