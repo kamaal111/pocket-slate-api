@@ -3,9 +3,9 @@ package routers
 import (
 	"net/http"
 
-	"github.com/kamaal111/pocket-slate-api/src/utils"
+	"github.com/gin-gonic/gin"
 )
 
-func NotFound(w http.ResponseWriter, r *http.Request) {
-	utils.ErrorHandler(w, "Not found", http.StatusNotFound)
+func NotFound(context *gin.Context) {
+	context.JSON(http.StatusNotFound, gin.H{"message": "Not found"})
 }
