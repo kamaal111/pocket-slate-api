@@ -32,19 +32,8 @@ func Start() {
 	engine.Run(serverAddress)
 
 	// mux.Handle(
-	// 	strings.Join([]string{"/v1/translations", "supported-locales"}, "/"),
-	// 	loggerMiddleware(
-	// 		allowHTTPMethods([]string{http.MethodGet})(
-	// 			authenticateApps([]string{"pocket-slate"})(
-	// 				translations.GetSupportedLocalesHandler))))
-	// mux.Handle(
 	// 	"/",
 	// 	loggerMiddleware(
 	// 		allowHTTPMethods([]string{http.MethodGet})(
 	// 			NotFound)))
-
-	// log.Printf("Listening on %s...", serverAddress)
-
-	// err := http.ListenAndServe(serverAddress, mux)
-	// log.Fatal(err)
 }
