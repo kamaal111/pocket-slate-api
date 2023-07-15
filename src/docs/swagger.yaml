@@ -44,7 +44,7 @@ info:
   title: Pocket slate API
   version: "1.0"
 paths:
-  /health:
+  /health/ping:
     get:
       consumes:
       - application/json

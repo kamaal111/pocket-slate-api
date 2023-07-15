@@ -8,6 +8,15 @@ PORT := "8000"
 test:
     go test ./...
 
+health-check:
+    #!/bin/zsh
+
+    PING_MESSAGE=$(curl -X "GET" \
+        "http://localhost:$PORT/api/v1/health/ping" \
+        -H "accept: application/json" | jq '.message')
+    just assert-equals $PING_MESSAGE "pong"
+    
+
 build:
     docker build -t $CONTAINER_NAME .
 
@@ -42,6 +51,10 @@ copy-api-keys-to-env:
 setup-dev-container: copy-to-container setup-zsh-environment setup-go-environment
 
 initialize-dev-container: copy-git-config-from-outside-container set-environment
+
+[private]
+assert-equals left_value right_value:
+    python3 scripts/assert_equals.py {{left_value}} {{right_value}}
 
 [private]
 stop-and-remove-container:
