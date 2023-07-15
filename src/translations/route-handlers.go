@@ -15,6 +15,7 @@ import (
 //	@Tags			translations
 //	@Accept			json
 //	@Produce		json
+//	@ID				makeTranslation
 //
 //	@Param			App-Version	header		string					true	"The version of the app."			example(4.2.0)
 //	@Param			App-Name	header		string					true	"The name of the app."				example(sup-app)
@@ -73,6 +74,8 @@ func makeTranslationHandler(context *gin.Context) {
 //	@Tags			translations
 //	@Accept			json
 //	@Produce		json
+//	@ID				getSupportedLocales
+//
 //	@Param			target		query		string	false	"The target language to translate the locales to."	example(it)	default(en)
 //
 //	@Param			App-Version	header		string	true	"The version of the app."							example(4.2.0)

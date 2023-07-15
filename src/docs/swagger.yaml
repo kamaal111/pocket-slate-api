@@ -49,6 +49,7 @@ paths:
       consumes:
       - application/json
       description: Pings the server
+      operationId: healthPing
       produces:
       - application/json
       responses:
@@ -65,6 +66,7 @@ paths:
       - application/json
       description: Translates the given text in the payload from source locale to
         target locale.
+      operationId: makeTranslation
       parameters:
       - description: The version of the app.
         example: 4.2.0
@@ -123,6 +125,7 @@ paths:
       consumes:
       - application/json
       description: Gets all the supported locales that can be used to translate.
+      operationId: getSupportedLocales
       parameters:
       - default: en
         description: The target language to translate the locales to.

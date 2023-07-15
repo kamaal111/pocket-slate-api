@@ -33,6 +33,7 @@ const docTemplate = `{
                     "health"
                 ],
                 "summary": "Checks if server is up or down",
+                "operationId": "healthPing",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -56,6 +57,7 @@ const docTemplate = `{
                     "translations"
                 ],
                 "summary": "Translate text.",
+                "operationId": "makeTranslation",
                 "parameters": [
                     {
                         "type": "string",
@@ -141,6 +143,7 @@ const docTemplate = `{
                     "translations"
                 ],
                 "summary": "Gets supported locales.",
+                "operationId": "getSupportedLocales",
                 "parameters": [
                     {
                         "type": "string",

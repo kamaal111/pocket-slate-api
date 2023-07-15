@@ -10,6 +10,7 @@ import (
 //	@Schemes
 //	@Description	Pings the server
 //	@Tags			health
+//	@ID				healthPing
 //	@Accept			json
 //	@Produce		json
 //	@Success		200	{object}	pingResponse
