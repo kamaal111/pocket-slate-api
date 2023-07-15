@@ -11,9 +11,9 @@ import (
 )
 
 type authenticateAppsHeaders struct {
-	AppName    string `header:"App-Name" bind:"required"`
-	AppVersion string `header:"App-Version" bind:"required"`
-	ApiKey     string `header:"Api-Key" bind:"required"`
+	AppName    string `header:"app-name" bind:"required"`
+	AppVersion string `header:"app-version" bind:"required"`
+	ApiKey     string `header:"api-key" bind:"required"`
 }
 
 func AuthenticateApps(apps []string) gin.HandlerFunc {
@@ -29,6 +29,30 @@ func AuthenticateApps(apps []string) gin.HandlerFunc {
 			ErrorHandler(context, Error{
 				Status:  http.StatusBadRequest,
 				Message: "Invalid headers provided",
+			})
+			return
+		}
+
+		if headers.ApiKey == "" {
+			ErrorHandler(context, Error{
+				Status:  http.StatusBadRequest,
+				Message: "api-key is required in the headers",
+			})
+			return
+		}
+
+		if headers.AppName == "" {
+			ErrorHandler(context, Error{
+				Status:  http.StatusBadRequest,
+				Message: "app-name is required in the headers",
+			})
+			return
+		}
+
+		if headers.AppVersion == "" {
+			ErrorHandler(context, Error{
+				Status:  http.StatusBadRequest,
+				Message: "app-version is required in the headers",
 			})
 			return
 		}
@@ -83,8 +107,8 @@ func AuthenticateApps(apps []string) gin.HandlerFunc {
 
 		if len(tokenVersions) == 0 {
 			ErrorHandler(context, Error{
-				Status:  http.StatusBadRequest,
-				Message: "Invalid version provided",
+				Status:  http.StatusForbidden,
+				Message: "Forbidden",
 			})
 			return
 		}

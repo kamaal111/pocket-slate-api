@@ -6,8 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Ping godoc
-//
 //	@Summary	Checks if server is up or down
 //	@Schemes
 //	@Description	Pings the server

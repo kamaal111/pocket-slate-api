@@ -70,10 +70,10 @@ func (service *translationService) Translate(text string, source string, target 
 	return resp[0].Text, nil
 }
 
-func (service *translationService) SupportedLanguages(target string) ([]supportedLocale, *utils.Error) {
+func (service *translationService) SupportedLanguages(target string) ([]supportedLocaleResponse, *utils.Error) {
 	lang, err := language.Parse(target)
 	if err != nil {
-		return []supportedLocale{}, &utils.Error{
+		return []supportedLocaleResponse{}, &utils.Error{
 			Message: fmt.Sprintf("Invalid target of %s", target),
 			Status:  http.StatusBadRequest,
 		}
@@ -81,21 +81,21 @@ func (service *translationService) SupportedLanguages(target string) ([]supporte
 
 	resp, err := service.Client.SupportedLanguages(service.Context, lang)
 	if err != nil {
-		return []supportedLocale{}, &utils.Error{
+		return []supportedLocaleResponse{}, &utils.Error{
 			Message: err.Error(),
 			Status:  http.StatusInternalServerError,
 		}
 	}
 
 	if len(resp) == 0 {
-		return []supportedLocale{}, &utils.Error{
+		return []supportedLocaleResponse{}, &utils.Error{
 			Message: "No supported locales found",
 			Status:  http.StatusNotFound,
 		}
 	}
 
-	mappedResponse := utils.MapSlice(resp, func(item translate.Language) supportedLocale {
-		return supportedLocale{Name: item.Name, Tag: item.Tag.String()}
+	mappedResponse := utils.MapSlice(resp, func(item translate.Language) supportedLocaleResponse {
+		return supportedLocaleResponse{Name: item.Name, Tag: item.Tag.String()}
 	})
 	return mappedResponse, nil
 }

@@ -14,8 +14,13 @@ type Error struct {
 	Status  int    `json:"status"`
 }
 
+type errorMessage struct {
+	Message string `json:"message"`
+}
+
 func ErrorHandler(context *gin.Context, errorObject Error) {
-	context.AbortWithStatusJSON(errorObject.Status, gin.H{"message": errorObject.Message})
+
+	context.AbortWithStatusJSON(errorObject.Status, errorMessage{Message: errorObject.Message})
 }
 
 func HandleValidationErrors(context *gin.Context, err error, placeOfFailure string) bool {
