@@ -12,7 +12,7 @@ build:
     docker build -t $CONTAINER_NAME .
 
 run: stop-and-remove-container
-    docker run -dp $PORT:$PORT --name $CONTAINER_NAME -e PORT=$PORT $CONTAINER_NAME
+    docker run -dp $PORT:$PORT --name $CONTAINER_NAME -e PORT=$PORT -e GIN_MODE="release" $CONTAINER_NAME
 
 build-run: build run
 
@@ -45,7 +45,8 @@ initialize-dev-container: copy-git-config-from-outside-container set-environment
 
 [private]
 stop-and-remove-container:
-    docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
+    docker stop $CONTAINER_NAME || true
+    docker rm $CONTAINER_NAME || true
 
 [private]
 setup-go-environment:

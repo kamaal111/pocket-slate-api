@@ -12,7 +12,6 @@ jobs:
     name: Build
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - name: Git - Checkout
         uses: actions/checkout@v3
@@ -22,6 +21,9 @@ jobs:
       
       - name: Build image
         run: just build
+
+      - name: Run image
+        run: just run
 
   test:
     name: Test
