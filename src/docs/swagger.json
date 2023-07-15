@@ -35,6 +35,91 @@
                 }
             }
         },
+        "/translations": {
+            "post": {
+                "description": "Translates the given text in the payload from source locale to target locale.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "translations"
+                ],
+                "summary": "Translate text.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "4.2.0",
+                        "description": "The version of the app.",
+                        "name": "App-Version",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "sup-app",
+                        "description": "The name of the app.",
+                        "name": "App-Name",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "1234lmao",
+                        "description": "API key registered to the app.",
+                        "name": "Api-Key",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "The text to translate.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/translations.makeTranslationPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/translations.makeTranslationResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.errorMessage"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/utils.errorMessage"
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "schema": {
+                            "$ref": "#/definitions/utils.errorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.errorMessage"
+                        }
+                    }
+                }
+            }
+        },
         "/translations/supported-locales": {
             "get": {
                 "description": "Gets all the supported locales that can be used to translate.",
@@ -125,6 +210,33 @@
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "translations.makeTranslationPayload": {
+            "type": "object",
+            "required": [
+                "source_locale",
+                "target_locale",
+                "text"
+            ],
+            "properties": {
+                "source_locale": {
+                    "type": "string"
+                },
+                "target_locale": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "translations.makeTranslationResponse": {
+            "type": "object",
+            "properties": {
+                "translated_text": {
                     "type": "string"
                 }
             }
