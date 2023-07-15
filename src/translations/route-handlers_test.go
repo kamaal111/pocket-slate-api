@@ -102,31 +102,3 @@ func TestMakeTranslationHandlerInCompletePayload(t *testing.T) {
 	}
 
 }
-
-func TestGetSupportedLocalesMissingTarget(t *testing.T) {
-	t.Setenv("APP_API_KEYS", fmt.Sprintf("{\"%s\":{\"%s\":\"%s\"}}", APP_NAME, APP_VERSION, API_KEY))
-
-	engine := gin.New()
-
-	handler := translations.Router(engine, "/v1")
-
-	e := httpexpect.WithConfig(httpexpect.Config{
-		Client: &http.Client{
-			Transport: httpexpect.NewBinder(handler),
-			Jar:       httpexpect.NewCookieJar(),
-		},
-		Reporter: httpexpect.NewAssertReporter(t),
-		Printers: []httpexpect.Printer{
-			httpexpect.NewDebugPrinter(t, true),
-		},
-	})
-
-	supportedLocales := e.GET("/v1/translations/supported-locales").
-		WithHeaders(HEADERS).
-		Expect().
-		Status(http.StatusUnprocessableEntity).
-		ContentType("application/json").
-		JSON().
-		Object()
-	supportedLocales.Value("message").IsEqual("'target' is required in the query params")
-}

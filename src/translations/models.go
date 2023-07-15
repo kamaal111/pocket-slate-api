@@ -1,6 +1,6 @@
 package translations
 
-type supportedLocale struct {
+type supportedLocaleResponse struct {
 	Name string `json:"name"`
 	Tag  string `json:"tag"`
 }
@@ -12,5 +12,5 @@ type makeTranslationPayload struct {
 }
 
 type getSupportedLocalesQuery struct {
-	Target string `form:"target" binding:"required"`
+	Target string `form:"target"`
 }

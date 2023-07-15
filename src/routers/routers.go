@@ -30,7 +30,7 @@ func Start() {
 	engine.Use(jsonMiddleware())
 
 	basePath := "api/v1"
-	docs.SwaggerInfo.BasePath = basePath
+	docs.SwaggerInfo.BasePath = fmt.Sprintf("/%s", basePath)
 
 	health.Router(engine, basePath)
 	translations.Router(engine, basePath)
