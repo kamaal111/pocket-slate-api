@@ -5,6 +5,10 @@ type supportedLocaleResponse struct {
 	Tag  string `json:"tag"`
 }
 
+type makeTranslationResponse struct {
+	TranslatedText string `json:"translated_text"`
+}
+
 type makeTranslationPayload struct {
 	Text         string `json:"text" binding:"required"`
 	TargetLocale string `json:"target_locale" binding:"required"`

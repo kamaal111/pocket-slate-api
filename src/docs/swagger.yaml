@@ -5,6 +5,24 @@ definitions:
       message:
         type: string
     type: object
+  translations.makeTranslationPayload:
+    properties:
+      source_locale:
+        type: string
+      target_locale:
+        type: string
+      text:
+        type: string
+    required:
+    - source_locale
+    - target_locale
+    - text
+    type: object
+  translations.makeTranslationResponse:
+    properties:
+      translated_text:
+        type: string
+    type: object
   translations.supportedLocaleResponse:
     properties:
       name:
@@ -41,6 +59,65 @@ paths:
       summary: Checks if server is up or down
       tags:
       - health
+  /translations:
+    post:
+      consumes:
+      - application/json
+      description: Translates the given text in the payload from source locale to
+        target locale.
+      parameters:
+      - description: The version of the app.
+        example: 4.2.0
+        in: header
+        name: App-Version
+        required: true
+        type: string
+      - description: The name of the app.
+        example: sup-app
+        in: header
+        name: App-Name
+        required: true
+        type: string
+      - description: API key registered to the app.
+        example: 1234lmao
+        in: header
+        name: Api-Key
+        required: true
+        type: string
+      - description: The text to translate.
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/translations.makeTranslationPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/translations.makeTranslationResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.errorMessage'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/utils.errorMessage'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/utils.errorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.errorMessage'
+      summary: Translate text.
+      tags:
+      - translations
   /translations/supported-locales:
     get:
       consumes:

@@ -9,6 +9,27 @@ import (
 	"github.com/kamaal111/pocket-slate-api/src/utils"
 )
 
+//	@Summary	Translate text.
+//	@Schemes
+//	@Description	Translates the given text in the payload from source locale to target locale.
+//	@Tags			translations
+//	@Accept			json
+//	@Produce		json
+//
+//	@Param			App-Version	header		string					true	"The version of the app."			example(4.2.0)
+//	@Param			App-Name	header		string					true	"The name of the app."				example(sup-app)
+//	@Param			Api-Key		header		string					true	"API key registered to the app."	example(1234lmao)
+//
+//	@Param			payload		body		makeTranslationPayload	true	"The text to translate."
+//
+//	@Success		200			{object}	[]makeTranslationResponse
+//
+//	@Failure		400			{object}	utils.errorMessage
+//	@Failure		403			{object}	utils.errorMessage
+//	@Failure		422			{object}	utils.errorMessage
+//	@Failure		500			{object}	utils.errorMessage
+//
+//	@Router			/translations [post]
 func makeTranslationHandler(context *gin.Context) {
 	var payload makeTranslationPayload
 	err := context.ShouldBindJSON(&payload)
@@ -25,10 +46,10 @@ func makeTranslationHandler(context *gin.Context) {
 		return
 	}
 
-	var resp string
+	var translatedText string
 	var httpErr *utils.Error
 	err = withTranslationService(func(ts translationService) {
-		resp, httpErr = ts.Translate(payload.Text, payload.SourceLocale, payload.TargetLocale)
+		translatedText, httpErr = ts.Translate(payload.Text, payload.SourceLocale, payload.TargetLocale)
 	})
 	if err != nil {
 		log.Println("Failed to get translation context", err)
@@ -43,7 +64,7 @@ func makeTranslationHandler(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"translated_text": resp})
+	context.JSON(http.StatusOK, makeTranslationResponse{TranslatedText: translatedText})
 }
 
 //	@Summary	Gets supported locales.
