@@ -1,12 +1,27 @@
-FROM golang:1.20-bookworm
+# App builder
+FROM golang:1.20-bookworm AS builder
 
-WORKDIR /usr/src/app
-
-# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
-COPY go.mod go.sum ./
-RUN go mod download && go mod verify
-
+WORKDIR /go/src/github.com/kamaal111/pocket-slate-api/
 COPY . .
-RUN go build -v -o /usr/local/bin/app src/*.go
+# Download dependencies.
+RUN apt update && apt install -y \
+    tzdata ca-certificates
+RUN go mod download -x
+RUN go mod verify
+# Run update certificates
+RUN update-ca-certificates
+# Build the binary.
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
+RUN go build -ldflags="-w -s" -v -o /go/bin/pocket-slate-api src/*.go
 
-CMD ["app"]
+# Build a smaller image with the minimum required things to run.
+FROM scratch
+# Import from builder.
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /go/bin/pocket-slate-api /go/bin/pocket-slate-api
+# Run the pocket-slate-api binary.
+EXPOSE 8000
+ENTRYPOINT ["/go/bin/pocket-slate-api"]
