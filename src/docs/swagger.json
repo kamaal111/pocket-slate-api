@@ -12,7 +12,7 @@
     },
     "basePath": "/api/v1",
     "paths": {
-        "/health": {
+        "/health/ping": {
             "get": {
                 "description": "Pings the server",
                 "consumes": [

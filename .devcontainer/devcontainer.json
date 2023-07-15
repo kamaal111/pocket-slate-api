@@ -16,7 +16,9 @@
 				"skellock.just",
 				"streetsidesoftware.code-spell-checker",
 				"golang.go",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"ms-python.python",
+				"ms-python.black-formatter"
 			]
 		}
 	},

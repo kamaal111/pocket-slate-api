@@ -20,7 +20,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/health": {
+        "/health/ping": {
             "get": {
                 "description": "Pings the server",
                 "consumes": [

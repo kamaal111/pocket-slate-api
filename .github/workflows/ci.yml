@@ -18,12 +18,18 @@ jobs:
 
       - name: Install just
         uses: taiki-e/install-action@just
+
+      - name: Install zsh
+        run: sudo apt update && sudo apt install -y zsh
       
       - name: Build image
         run: just build
 
       - name: Run image
         run: just run
+
+      - name: Health check
+        run: just health-check
 
   test:
     name: Test
