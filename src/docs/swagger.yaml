@@ -98,9 +98,7 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/translations.makeTranslationResponse'
-            type: array
+            $ref: '#/definitions/translations.makeTranslationResponse'
         "400":
           description: Bad Request
           schema:

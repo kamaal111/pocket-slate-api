@@ -23,7 +23,7 @@ import (
 //
 //	@Param			payload		body		makeTranslationPayload	true	"The text to translate."
 //
-//	@Success		200			{object}	[]makeTranslationResponse
+//	@Success		200			{object}	makeTranslationResponse
 //
 //	@Failure		400			{object}	utils.errorMessage
 //	@Failure		403			{object}	utils.errorMessage

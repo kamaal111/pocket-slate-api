@@ -97,10 +97,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/translations.makeTranslationResponse"
-                            }
+                            "$ref": "#/definitions/translations.makeTranslationResponse"
                         }
                     },
                     "400": {
