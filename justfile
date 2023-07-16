@@ -21,7 +21,9 @@ build:
     docker build -t $CONTAINER_NAME .
 
 run: stop-and-remove-container
-    docker run -dp $PORT:$PORT --name $CONTAINER_NAME -e PORT=$PORT -e GIN_MODE="release" $CONTAINER_NAME
+    docker run -dp $PORT:$PORT --name $CONTAINER_NAME \
+        -e PORT=$PORT -e GIN_MODE="release" -e APP_API_KEYS=$APP_API_KEYS -e TRANSLATE_API_KEY=$TRANSLATE_API_KEY \
+        $CONTAINER_NAME
 
 build-run: build run
 
