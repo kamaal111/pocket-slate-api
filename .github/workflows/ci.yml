@@ -26,7 +26,10 @@ jobs:
         run: just build
 
       - name: Run image
-        run: just run
+        run: |
+          export APP_API_KEYS=""
+          export TRANSLATE_API_KEY=""
+          just run
 
       - name: Health check
         run: just health-check
